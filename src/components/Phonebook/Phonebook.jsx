@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { Section } from './Seaction';
 import { nanoid } from 'nanoid';
 import { ContactForm } from './PhonebookForm';
@@ -6,41 +6,29 @@ import { Contacts } from './Contacts';
 
 const LS_KEY = 'savedContacts';
 
-export class Phonebook extends Component {
-  state = {
-    contacts: [],
-    filter: '',
+export const Phonebook = () => {
+  const savedContacts = localStorage.getItem(LS_KEY);
+  const [contacts, setContacts] = useState(
+    () => JSON.parse(savedContacts) ?? []
+  );
+  const [filter, setFilter] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem(LS_KEY, JSON.stringify(contacts));
+  }, [contacts]);
+
+  const onDeleteBtnClick = id => {
+    setContacts(prevContacts =>
+      prevContacts.filter(contact => contact.id !== id)
+    );
   };
 
-  componentDidMount() {
-    const savedContacts = localStorage.getItem(LS_KEY);
-    if (savedContacts) {
-      this.setState({
-        contacts: JSON.parse(savedContacts),
-      });
-    }
-  }
-
-  componentDidUpdate(_, prevState) {
-    if (prevState.contacts !== this.state.contacts) {
-      localStorage.setItem(LS_KEY, JSON.stringify(this.state.contacts));
-    }
-  }
-
-  onDeleteBtnClick = id => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== id),
-    }));
+  const HandleChangeFilter = e => {
+    setFilter(e.target.value);
   };
 
-  HandleChangeFilter = e => {
-    this.setState({
-      filter: e.target.value,
-    });
-  };
-
-  SubmitNameForm = ({ name, number }, { resetForm }) => {
-    const isExist = this.state.contacts.find(contact => contact.name === name);
+  const SubmitNameForm = ({ name, number }, { resetForm }) => {
+    const isExist = contacts.find(contact => contact.name === name);
 
     if (isExist) {
       return alert(`${name} is alredy in contacts.`);
@@ -52,28 +40,22 @@ export class Phonebook extends Component {
       id: nanoid(),
     };
 
-    this.setState(prevState => ({
-      contacts: [contact, ...prevState.contacts],
-      name,
-      number,
-    }));
+    setContacts(prevContacts => [contact, ...prevContacts]);
     resetForm();
   };
 
-  render() {
-    return (
-      <>
-        <Section title={'Phonebook'}></Section>
-        <ContactForm onSubmit={this.SubmitNameForm} />
-        <Section title={'Contacts'}>
-          <Contacts
-            onChange={this.HandleChangeFilter}
-            filter={this.state.filter}
-            contacts={this.state.contacts}
-            onDeleteBtnClick={this.onDeleteBtnClick}
-          />
-        </Section>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Section title={'Phonebook'}></Section>
+      <ContactForm onSubmit={SubmitNameForm} />
+      <Section title={'Contacts'}>
+        <Contacts
+          onChange={HandleChangeFilter}
+          filter={filter}
+          contacts={contacts}
+          onDeleteBtnClick={onDeleteBtnClick}
+        />
+      </Section>
+    </>
+  );
+};
