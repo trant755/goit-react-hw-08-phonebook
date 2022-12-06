@@ -2,19 +2,26 @@ import { Formik, Field } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/contactsSlice';
 import * as SC from './Phonebook.styled';
+import { nanoid } from 'nanoid';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(state => state.contacts.contacts);
 
-  const onSubmit = (values, { resetForm }) => {
-    const isExist = contacts.find(contact => values.name === contact.name);
+  const onSubmit = ({ name, number }, { resetForm }) => {
+    const isExist = contacts.find(contact => name === contact.name);
 
     if (isExist) {
-      return alert(`${values.name} is alredy in contacts.`);
+      return alert(`${name} is alredy in contacts.`);
     }
 
-    dispatch(addContact(values));
+    const contact = {
+      id: nanoid(),
+      name,
+      number,
+    };
+
+    dispatch(addContact(contact));
     resetForm();
   };
 
