@@ -1,13 +1,20 @@
 import { Filter } from './Filter';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteContact } from 'redux/contactsSlice';
 
-export const Contacts = ({ onChange, filter, contacts, onDeleteBtnClick }) => {
+export const Contacts = () => {
+  const contacts = useSelector(state => state.contacts.contacts);
+  const filter = useSelector(state => state.filter.query);
+  const dispatch = useDispatch();
+
   let normalizedFilter = filter.toLowerCase();
   const filtredContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(normalizedFilter)
   );
+
   return (
     <>
-      <Filter onChange={onChange} filter={filter} />
+      <Filter />
       <ul style={{ listStyle: 'inside', paddingLeft: '32px' }}>
         {filtredContacts.map(contact => {
           return (
@@ -16,7 +23,7 @@ export const Contacts = ({ onChange, filter, contacts, onDeleteBtnClick }) => {
               <button
                 style={{ marginLeft: '10px' }}
                 type="button"
-                onClick={() => onDeleteBtnClick(contact.id)}
+                onClick={() => dispatch(deleteContact(contact.id))}
               >
                 Delete
               </button>
