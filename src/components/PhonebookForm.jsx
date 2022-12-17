@@ -1,8 +1,7 @@
 import { Formik, Field } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactsSlice';
 import * as SC from './Phonebook.styled';
-import { nanoid } from 'nanoid';
+import { addContact } from 'redux/operation';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
@@ -16,7 +15,6 @@ export const ContactForm = () => {
     }
 
     const contact = {
-      id: nanoid(),
       name,
       number,
     };

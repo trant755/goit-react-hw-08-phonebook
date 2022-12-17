@@ -1,11 +1,19 @@
 import { Filter } from './Filter';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from 'redux/contactsSlice';
+import { useEffect } from 'react';
+import { fetchContacts } from 'redux/operation';
+import { ContactsItem } from './ContactsItem';
 
 export const Contacts = () => {
   const contacts = useSelector(state => state.contacts.contacts);
   const filter = useSelector(state => state.filter.query);
+  const isLoading = useSelector(state => state.contacts.isLoading);
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   let normalizedFilter = filter.toLowerCase();
   const filtredContacts = contacts.filter(contact =>
@@ -15,18 +23,12 @@ export const Contacts = () => {
   return (
     <>
       <Filter />
+      {isLoading && <p>Loading, please wait...</p>}
       <ul style={{ listStyle: 'inside', paddingLeft: '32px' }}>
         {filtredContacts.map(contact => {
           return (
             <li key={contact.id}>
-              <span>{contact.name}:</span> <span>{contact.number}</span>
-              <button
-                style={{ marginLeft: '10px' }}
-                type="button"
-                onClick={() => dispatch(deleteContact(contact.id))}
-              >
-                Delete
-              </button>
+              <ContactsItem contact={contact} />
             </li>
           );
         })}
