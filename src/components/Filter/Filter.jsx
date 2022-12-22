@@ -1,4 +1,4 @@
-import { Formik, Field } from 'formik';
+import { Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeQueryFilter } from 'redux/filterSlice';
 import * as SC from './Filter.styled';
