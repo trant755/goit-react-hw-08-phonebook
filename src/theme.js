@@ -1,22 +1,12 @@
 export const theme = {
   colors: {
-    body: '#e7ecf2',
-    black: '#000',
-    white: '#fff',
-    grey: '#f3f6f9',
-    textGrey: '#8e9ca8',
-    text: '#2a2a2a',
-    background: '#fff',
-    primary: '#07c',
-    secondary: '#e7ecf2',
-    accent: '#609',
-    muted: '#f6f6f6',
-    darkGrey: '#c7c7c7',
-    statsColor: '#fff',
+    textBlack: '#260101',
+    textGreen: '#2A8C82',
+    borderGray: 'rgb(0, 0, 0, 10%)',
   },
   space: [0, 2, 4, 8, 16, 32, 64, 128, 256],
   fonts: {
-    body: 'system-ui, sans-serif',
+    body: 'Roboto, sans-serif',
     heading: 'system-ui, sans-serif',
     monospace: 'Menlo, monospace',
   },
@@ -41,6 +31,7 @@ export const theme = {
   borders: {
     none: 'none',
     normal: '1px solid',
+    bold: '2px solid',
   },
   radii: {
     none: '0',

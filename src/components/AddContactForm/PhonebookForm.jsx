@@ -1,13 +1,16 @@
-import { Formik, Field } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
-import * as SC from './Phonebook.styled';
-import { addContact } from 'redux/operation';
+import { Formik } from 'formik';
+import * as SC from './AddContactForm.styled';
+import { useGetContactsQuery, useAddContactMutation } from 'redux/contactsApi';
+import { useDispatch } from 'react-redux';
+import { changeModalStatus } from 'redux/addModalSlice';
+import { Box } from 'components/Box';
 
 export const ContactForm = () => {
+  const { data: contacts, isSuccess } = useGetContactsQuery();
+  const [addContact] = useAddContactMutation();
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts.contacts);
 
-  const onSubmit = ({ name, number }, { resetForm }) => {
+  const onSubmit = ({ name, phone }, { resetForm }) => {
     const isExist = contacts.find(contact => name === contact.name);
 
     if (isExist) {
@@ -16,43 +19,51 @@ export const ContactForm = () => {
 
     const contact = {
       name,
-      number,
+      phone,
     };
-
-    dispatch(addContact(contact));
+    addContact(contact);
     resetForm();
+    isSuccess && dispatch(changeModalStatus(false));
   };
 
   return (
     <Formik
       initialValues={{
         name: '',
-        number: '',
+        phone: '',
       }}
       onSubmit={onSubmit}
     >
       <SC.Form>
         <SC.LabelInput>
           Name
-          <Field
+          <SC.Input
             type="text"
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             required
-          ></Field>
+          ></SC.Input>
         </SC.LabelInput>
         <SC.LabelInput>
           Number
-          <Field
+          <SC.Input
             type="tel"
-            name="number"
+            name="phone"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
-          ></Field>
+          ></SC.Input>
         </SC.LabelInput>
-        <button type="submit">Add contact</button>
+        <Box display={'flex'} justifyContent={'space-between'}>
+          <SC.AddBtn type="submit">Add contact</SC.AddBtn>
+          <SC.AddBtn
+            type="button"
+            onClick={() => dispatch(changeModalStatus(false))}
+          >
+            Back to contacts
+          </SC.AddBtn>
+        </Box>
       </SC.Form>
     </Formik>
   );
