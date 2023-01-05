@@ -17,7 +17,7 @@ export const ContactsItem = ({ contact }) => {
     <>
       <SC.ContactInfo>
         <SC.Initials>{getInitial(contact.name)}</SC.Initials>
-        <SC.Name>{contact.name}:</SC.Name> <SC.Phone>{contact.phone}</SC.Phone>
+        <SC.Name>{contact.name}:</SC.Name> <SC.Phone>{contact.number}</SC.Phone>
       </SC.ContactInfo>
       <SC.DeleteBtn
         style={{ marginLeft: '10px' }}

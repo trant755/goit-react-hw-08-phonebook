@@ -1,5 +1,8 @@
 export const theme = {
   colors: {
+    bgLight: '#7ebfb3',
+    bgMidle: '#2A8C82',
+    bgDark: '#1F6962',
     textBlack: '#260101',
     textGreen: '#2A8C82',
     borderGray: 'rgb(0, 0, 0, 10%)',

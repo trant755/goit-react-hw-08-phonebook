@@ -9,4 +9,5 @@ export const App = styled.div`
   height: 700px;
   margin-left: auto;
   margin-right: auto;
+  overflow: hidden;
 `;

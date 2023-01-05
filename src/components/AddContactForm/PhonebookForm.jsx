@@ -1,16 +1,15 @@
 import { Formik } from 'formik';
 import * as SC from './AddContactForm.styled';
 import { useGetContactsQuery, useAddContactMutation } from 'redux/contactsApi';
-import { useDispatch } from 'react-redux';
-import { changeModalStatus } from 'redux/addModalSlice';
 import { Box } from 'components/Box';
+import { useNavigate } from 'react-router-dom';
 
 export const ContactForm = () => {
   const { data: contacts, isSuccess } = useGetContactsQuery();
   const [addContact] = useAddContactMutation();
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const onSubmit = ({ name, phone }, { resetForm }) => {
+  const onSubmit = ({ name, number }, { resetForm }) => {
     const isExist = contacts.find(contact => name === contact.name);
 
     if (isExist) {
@@ -19,18 +18,18 @@ export const ContactForm = () => {
 
     const contact = {
       name,
-      phone,
+      number,
     };
     addContact(contact);
     resetForm();
-    isSuccess && dispatch(changeModalStatus(false));
+    isSuccess && navigate('/');
   };
 
   return (
     <Formik
       initialValues={{
         name: '',
-        phone: '',
+        number: '',
       }}
       onSubmit={onSubmit}
     >
@@ -49,7 +48,7 @@ export const ContactForm = () => {
           Number
           <SC.Input
             type="tel"
-            name="phone"
+            name="number"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
@@ -57,10 +56,7 @@ export const ContactForm = () => {
         </SC.LabelInput>
         <Box display={'flex'} justifyContent={'space-between'}>
           <SC.AddBtn type="submit">Add contact</SC.AddBtn>
-          <SC.AddBtn
-            type="button"
-            onClick={() => dispatch(changeModalStatus(false))}
-          >
+          <SC.AddBtn type="button" onClick={() => navigate('/')}>
             Back to contacts
           </SC.AddBtn>
         </Box>
