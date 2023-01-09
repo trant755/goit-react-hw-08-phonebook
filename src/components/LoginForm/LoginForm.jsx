@@ -18,9 +18,14 @@ export const LoginForm = () => {
     try {
       const data = await login(userLogin).unwrap();
       dispatch(loginUser(data));
+
       resetForm();
     } catch (error) {
-      // alert(error.data.message);
+      if (error.status === 400) {
+        alert('Login error: wrong username or password!');
+      } else {
+        console.log(error);
+      }
     }
   };
 

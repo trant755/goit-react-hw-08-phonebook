@@ -5,6 +5,7 @@ import { useGetContactsQuery } from 'redux/contactsApi';
 import { AddContactBtn } from '../AddContactBtn/AddContactBtn';
 import * as SC from './Contacts.styled';
 import { Loader } from 'components/Loader/Loader';
+import { Box } from 'components/Box';
 
 export const Contacts = () => {
   const { data, isLoading } = useGetContactsQuery();
@@ -17,8 +18,19 @@ export const Contacts = () => {
   return (
     <>
       <Filter />
-      {isLoading && <Loader />}
-      {!isLoading && (
+      {isLoading ? (
+        <Loader />
+      ) : data.length === 0 ? (
+        <Box
+          width="100%"
+          height="100%"
+          display="flex"
+          alignItems="center"
+          bg="rgb(0, 0, 0, 1%)"
+        >
+          <SC.NoContactsTitle>No contacts yet</SC.NoContactsTitle>
+        </Box>
+      ) : (
         <SC.ContactsList style={{ listStyle: 'inside', paddingLeft: '32px' }}>
           {data &&
             filtredContacts.map(contact => {

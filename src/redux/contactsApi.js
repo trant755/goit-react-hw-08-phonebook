@@ -17,6 +17,7 @@ export const contactsApi = createApi({
     getContacts: builder.query({
       query: () => '/contacts',
       providesTags: [{ type: 'Contact', id: 'LIST' }],
+      keepUnusedDataFor: 0,
     }),
     addContact: builder.mutation({
       query: contact => ({

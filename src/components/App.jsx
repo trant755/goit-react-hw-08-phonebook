@@ -9,9 +9,11 @@ import NotFound from 'pages/NotFound';
 import { useCurrentUserQuery } from 'redux/authApi';
 import { RestrictedRoute } from './RestrictedRoute';
 import { PrivateRoute } from './PrivateRoute';
+import { useSelector } from 'react-redux';
 
 export const App = () => {
-  useCurrentUserQuery();
+  const token = useSelector(state => state.auth.token);
+  useCurrentUserQuery(null, { skip: !token });
 
   return (
     <Box p={5}>

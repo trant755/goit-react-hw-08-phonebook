@@ -10,8 +10,8 @@ export const UserMenuBox = styled.div`
 `;
 
 export const UserMenu = styled.div`
-  transform: ${p => (p.isOpen ? 'translateY(0)' : 'translateY(-100%)')};
   transition: transform 250ms linear;
+  transform: translateY(-100%);
 
   display: flex;
   flex-direction: column;
@@ -23,6 +23,18 @@ export const UserMenu = styled.div`
   width: 200px;
   height: 270px;
   background-color: ${p => p.theme.colors.bgDark};
+
+  &.enter {
+    transform: translateY(-100%);
+  }
+
+  &.enter-done {
+    transform: translateY(0);
+  }
+
+  &.exit-active {
+    transform: translateY(-100%);
+  }
 `;
 
 export const AvatarBox = styled.div`

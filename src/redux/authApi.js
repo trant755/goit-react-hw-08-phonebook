@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { refreshUser } from './authSlice';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -35,18 +34,7 @@ export const authApi = createApi({
       }),
     }),
     currentUser: builder.query({
-      queryFn: async (arg, queryApi, extraOptions, fetchWithBQ) => {
-        const token = queryApi.getState().auth.token;
-        try {
-          if (!token) return { error: 'User not login' };
-          const response = await fetchWithBQ('/users/current');
-
-          queryApi.dispatch(refreshUser(response.data));
-          return { data: response.data };
-        } catch (error) {
-          return { error: error };
-        }
-      },
+      query: () => '/users/current',
     }),
   }),
 });
