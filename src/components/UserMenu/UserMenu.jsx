@@ -25,7 +25,6 @@ export const UserMenu = ({ user, isOpen, toggleMenu, refUserMenu }) => {
       const userMenu = refUserMenu.current;
 
       if (e.target.closest(`#userMenu`) === userMenu) return;
-      console.log('лисенер есть');
       toggleMenu();
     };
 
